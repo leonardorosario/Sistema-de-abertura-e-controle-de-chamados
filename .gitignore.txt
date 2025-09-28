@@ -1,0 +1,15 @@
+# Arquivos e pastas específicos do Visual Studio
+.vs/
+*.suo
+*.user
+
+# Pastas de Build
+[Bb]in/
+[Oo]bj/
+
+# Arquivos de pacotes NuGet
+packages/
+*.nupkg
+
+# Outros
+*.DS_Store

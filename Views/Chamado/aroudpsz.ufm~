@@ -1,0 +1,30 @@
+﻿@model List<AlunoViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Listagem de Alunos</h2>
+
+<a href="/aluno/create" class="btn btn-success" >Novo Registro</a>
+<br />
+
+<table class="table table-responsive table-striped">
+    <tr>
+        <th>Ações</th>
+        <th>RA</th>
+        <th>Nome</th>
+        <th>Data de nascimento</th>
+        <th>Mensalidade</th>
+        <th>Cidade</th>
+    </tr>
+    @foreach (var jogo in Model)
+    {
+        <tr>
+            <td></td>
+            <td>@aluno.Id</td>
+            <td>@aluno.Nome</td>
+            <td>@aluno.DataNascimento.ToShortDateString()</td>
+            <td>@aluno.Mensalidade.ToString("0.00")</td>
+            <td>@aluno.CidadeId</td>
+        </tr>
+    }
+</table>
