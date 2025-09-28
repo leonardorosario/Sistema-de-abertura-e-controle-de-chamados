@@ -1,5 +1,6 @@
 ﻿using CadAlunoMVC.DAO;
 using CadAlunoMVC.Models;
+using CadChamadoMVC.DAO;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,10 @@ namespace CadAlunoMVC.Controllers
             try
             {
                 ViewBag.Operacao = "I";
+
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                ViewBag.Usuarios = usuarioDAO.Listagem();
+
                 ChamadoViewModel chamado = new ChamadoViewModel();
                 chamado.DataAbertura = DateTime.Now;
                 ChamadoDAO dAO = new ChamadoDAO();
@@ -84,26 +89,26 @@ namespace CadAlunoMVC.Controllers
         }
 
 
-        public IActionResult Salvar(ChamadoViewModel aluno, string Operacao)
+        public IActionResult Salvar(ChamadoViewModel chamado, string Operacao)
         {
             try
             {
-                ValidaDados(aluno, Operacao);
+                ValidaDados(chamado, Operacao);
                 if (ModelState.ErrorCount == 0)
                 {
                     ChamadoDAO dao = new ChamadoDAO();
 
                     if (Operacao == "I")
-                        dao.Inserir(aluno);
+                        dao.Inserir(chamado);
                     else
-                        dao.Alterar(aluno);
+                        dao.Alterar(chamado);
 
                     return RedirectToAction("index");
                 }
                 else
                 {
                     ViewBag.Operacao = Operacao;   
-                    return View("Form", aluno);
+                    return View("Form", chamado);
                 }
             }
             catch (Exception ex)
@@ -117,6 +122,10 @@ namespace CadAlunoMVC.Controllers
             try
             {
                 ViewBag.Operacao = "A";
+
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                ViewBag.Usuarios = usuarioDAO.Listagem();
+
                 ChamadoDAO dao = new ChamadoDAO();
                 ChamadoViewModel chamado = dao.Consulta(id);
                 if (chamado == null)
