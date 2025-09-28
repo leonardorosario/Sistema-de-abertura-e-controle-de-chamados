@@ -4,38 +4,39 @@
 }
 <h2>Listagem de Chamados</h2>
 
-<a href="/chamado/create" class="btn btn-success">Novo Registro</a>
+<a href="/chamado/create" class="btn btn-success">Novo Chamado</a>
 <br />
 
-<table class="table table-responsive table-striped">
+<table class="table table-responsive table-striped table-bordered">
     <tr>
         <th>Ações</th>
-        <th>RA</th>
-        <th>Nome</th>
-        <th>Data de nascimento</th>
-        <th>Mensalidade</th>
-        <th>Cidade</th>
+        <th>ID</th>
+        <th>Data de Abertura</th>
+        <th>Descrição do Problema</th>
+        <th>Situação</th>
     </tr>
-    @foreach (var aluno in Model)
+    @foreach (var chamado in Model)
     {
         <tr>
             <td>
-                <a href="/aluno/Edit?id=@aluno.Id" class="btn btn-info">Editar</a>
-                <a href="javascript:apagarAluno(@aluno.Id)" class="btn btn-danger">Apagar</a>
+                <a href="/chamado/Edit?id=@chamado.Id" class="btn btn-info">Editar</a>
+                <a href="javascript:apagarChamado(@chamado.Id)" class="btn btn-danger">Apagar</a>
             </td>
-            <td>@aluno.Id</td>
-            <td>@aluno.Nome</td>
-            <td>@aluno.DataNascimento.ToShortDateString()</td>
-            <td>@aluno.Mensalidade?.ToString("0.00")</td>
-            <td>@aluno.CidadeId</td>
+            <td>@chamado.Id</td>
+            <td>@chamado.DataAbertura.ToShortDateString()</td>
+            <td>@chamado.DescricaoProblema</td>
+            <td>
+                @* Converte o número da situação [1] ou [2] para um texto amigável *@
+                @(chamado.Situacao == 1 ? "Pendente" : "Atendido")
+            </td>
         </tr>
     }
 </table>
 
 <script>
-    function apagarAluno(id) {
-        if (confirm('Confirma a exclusão do registro?'))
-            location.href = 'aluno/Delete?id=' + id;
+    function apagarChamado(id) {
+        if (confirm('Confirma a exclusão do chamado?'))
+            location.href = 'chamado/Delete?id=' + id;
     }
 </script>
 

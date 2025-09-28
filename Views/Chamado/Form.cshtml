@@ -1,46 +1,120 @@
 ﻿@model ChamadoViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isInsert = string.IsNullOrEmpty(ViewBag.Operacao) || ViewBag.Operacao == "I";
+    ViewBag.Title = isInsert ? "Abertura de Chamado" : "Alterar Chamado";
+    string operacao = isInsert ? "I" : "A";
 }
-<h2>Cadastro de Aluno</h2>
-<form action="Salvar" method="post" class="col-md-6">
+<h2>@ViewBag.Title</h2>
+@* Utilizando o Helper do MVC para criar o formulário *@
+@using (Html.BeginForm("Salvar", "Chamado", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 
-    <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
+    <div class="form-horizontal col-md-8">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <label for="Id" class="control-label">RA</label>
+        <input type="hidden" name="operacao" value="@operacao" />
 
-    @if (ViewBag.Operacao == "I")
-    {
-        <input type="number" Name="Id" value="@Model.Id" class="form-control" />
-    }
-    else
-    {
-        <input type="number" Name="Id" value="@Model.Id" readonly class="form-control" />
-    }
+        <div class="form-group">
+            @Html.LabelFor(model => model.Id, "ID do Chamado", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <marquee> <span asp-validation-for="Id" class="text-danger"></span></marquee>
-    <br /><br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataAbertura, "Data de Abertura", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.DataAbertura, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.DataAbertura, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <label for="Nome" class="control-label">Nome do aluno</label>
-    <input asp-for="Nome" class="form-control" />
-    <span asp-validation-for="Nome" class="text-danger"></span>
-    <br /><br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.DescricaoProblema, "Descrição do Problema", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.DescricaoProblema, new { @class = "form-control", @rows = 4 })
+                @Html.ValidationMessageFor(model => model.DescricaoProblema, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <label for="Mensalidade" class="control-label">Mensalidade</label>
-    <input asp-for="Mensalidade" class="form-control" />
-    <span asp-validation-for="Mensalidade" class="text-danger"></span>
-    <br /><br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Situacao, "Situação", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @* Dropdown para a situação, que é mais intuitivo *@
+                @Html.DropDownListFor(model => model.Situacao, new SelectList(
+                new[] {
+                        new { Value = "1", Text = "Pendente" },
+                        new { Value = "2", Text = "Atendido" },
+                        }, "Value", "Text"), "Selecione a Situação",
+                        new { @class = "form-control", id = "situacaoDropdown" }
+                        )
+            @Html.ValidationMessageFor(model => model.Situacao, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-    <label for="DataNascimento" class="control-label">Data de nascimento</label>
-    <input type="date" Name="DataNascimento" value="@Model.DataNascimento.ToString("yyyy-MM-dd")" class="form-control" />
-    <span asp-validation-for="DataNascimento" class="text-danger"></span>
-    <br /><br />
+    @* Estes campos só aparecerão se a situação for "Atendido" *@
+    <div id="camposAtendimento" style="display: none;">
+        <hr />
+        <h4>Dados do Atendimento</h4>
 
-    <label for="CidadeId" class="control-label">Código da cidade</label>
-    <input asp-for="CidadeId" class="form-control" />
-    <span asp-validation-for="CidadeId" class="text-danger"></span>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataAtendimento, "Data do Atendimento", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.DataAtendimento, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <br /><br />
-    <input type="submit" value="Salvar dados" class="btn btn-success" />
-    <br />
-</form> 
+        <div class="form-group">
+            @Html.LabelFor(model => model.DescricaoAtendimento, "Descrição do Atendimento", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.DescricaoAtendimento, new { @class = "form-control", @rows = 4 })
+                @Html.ValidationMessageFor(model => model.DescricaoAtendimento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsuarioId, "Cód. do Usuário", new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.UsuarioId, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.UsuarioId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <input type="submit" value="Salvar" class="btn btn-success" />
+            <a href="/chamado/index" class="btn btn-default">Cancelar</a>
+        </div>
+    </div>
+</div>
+}
+
+
+@* Script para mostrar/ocultar os campos de atendimento *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const situacaoDropdown = document.getElementById('situacaoDropdown');
+        const camposAtendimento = document.getElementById('camposAtendimento');
+
+        function toggleAtendimentoFields() {
+            // Se o valor for '2' (Atendido), mostra os campos. Senão, oculta.
+            if (situacaoDropdown.value === '2') {
+                camposAtendimento.style.display = 'block';
+            } else {
+                camposAtendimento.style.display = 'none';
+            }
+        }
+
+        // Executa a função quando a página carrega
+        toggleAtendimentoFields();
+
+        // Executa a função toda vez que o valor do dropdown mudar
+        situacaoDropdown.addEventListener('change', toggleAtendimentoFields);
+    });
+</script>
