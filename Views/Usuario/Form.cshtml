@@ -1,0 +1,47 @@
+﻿@model CadAlunoMVC.Models.UsuarioViewModel
+
+@{
+    // Define o título da página com base na operação (se o Id é novo ou existente)
+    ViewBag.Title = (Model.Id == 0 || ViewBag.Operacao == "I") ? "Novo Usuário" : "Alterar Usuário";
+    string operacao = (Model.Id == 0 || ViewBag.Operacao == "I") ? "I" : "A";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Salvar", "Usuario", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @* Campo oculto para enviar a operação (I = Insert, A = Alterar) *@
+        <input type="hidden" name="operacao" value="@operacao" />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* O ID não pode ser editado, então usamos readonly *@
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-success" />
+                <a href="/usuario/index" class="btn btn-default">Cancelar</a>
+            </div>
+        </div>
+    </div>
+}

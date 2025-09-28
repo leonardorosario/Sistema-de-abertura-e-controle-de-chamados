@@ -1,0 +1,41 @@
+﻿@model List<UsuarioViewModel>
+
+@{
+    ViewBag.Title = "Listagem de Usuários";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<a href="/usuario/create" class="btn btn-primary">Novo Usuário</a>
+<br />
+<br />
+
+@if (TempData["ErroExcluir"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErroExcluir"]
+    </div>
+}
+
+
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+    </tr>
+
+    @foreach (var usuario in Model)
+    {
+        <tr>
+            <td>@usuario.Id</td>
+            <td>@usuario.Nome</td>
+            <td>
+                <a href="/usuario/edit/@usuario.Id" class="btn btn-info btn-sm">Editar</a>
+                <a href="/usuario/delete/@usuario.Id" class="btn btn-danger btn-sm" onclick="return confirm('Confirma a exclusão do usuário @usuario.Nome?');">
+                    Excluir
+                </a>
+            </td>
+        </tr>
+    }
+</table>
