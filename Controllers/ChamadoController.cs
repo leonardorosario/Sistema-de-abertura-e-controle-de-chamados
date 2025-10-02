@@ -37,6 +37,7 @@ namespace CadAlunoMVC.Controllers
                 chamado.DataAbertura = DateTime.Now;
                 ChamadoDAO dAO = new ChamadoDAO();
                 chamado.Id = dAO.ProximoId();
+                ViewBag.Hoje = DateTime.Now.ToString("yyyy-MM-dd"); 
                 return View("Form", chamado);
             }
             catch (Exception ex)
@@ -64,6 +65,9 @@ namespace CadAlunoMVC.Controllers
 
             if (chamado.DataAbertura == DateTime.MinValue)
                 ModelState.AddModelError("dataAbertura", "A data de abertura é obrigatória.");
+
+            if (chamado.DataAbertura.Date > DateTime.Now.Date)
+                ModelState.AddModelError("dataAbertura", "A data de abertura não pode ser uma data futura.");
 
             if (string.IsNullOrWhiteSpace(chamado.DescricaoProblema))
                 ModelState.AddModelError("descricaoProblema", "A descrição do problema é obrigatória.");
@@ -131,7 +135,8 @@ namespace CadAlunoMVC.Controllers
                 if (chamado == null)
                     return RedirectToAction("index");
                 else
-                    return View("Form", chamado);
+                ViewBag.Hoje = DateTime.Now.ToString("yyyy-MM-dd");
+                return View("Form", chamado);
             }
             catch (Exception erro)
             {
