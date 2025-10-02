@@ -20,7 +20,7 @@ namespace CadChamadoMVC.DAO
 
         public void Inserir(UsuarioViewModel usuario)
         {
-            string sql = "insert into usuarios (id, nome) values (@id, @nome)";
+            string sql = "insert into usuarios(id, nome) values (@id, @nome)";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 

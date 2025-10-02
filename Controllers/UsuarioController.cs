@@ -17,6 +17,8 @@ namespace CadChamadoMVC.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Operacao = "I";
+
             UsuarioDAO dao = new UsuarioDAO();
             UsuarioViewModel usuario = new UsuarioViewModel();
             usuario.Id = dao.ProximoId();
@@ -25,6 +27,8 @@ namespace CadChamadoMVC.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.Operacao = "A";
+
             UsuarioDAO dao = new UsuarioDAO();
             UsuarioViewModel usuario = dao.Consulta(id);
             if (usuario == null)

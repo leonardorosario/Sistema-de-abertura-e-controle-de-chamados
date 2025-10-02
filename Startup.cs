@@ -46,7 +46,7 @@ namespace CadAlunoMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Aluno}/{action=Index}/{id?}");
+                    pattern: "{controller=Chamado}/{action=Index}/{id?}");
             });
         }
     }
