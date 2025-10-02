@@ -53,6 +53,8 @@ namespace CadChamadoMVC.Controllers
                 }
                 else
                 {
+                    ViewBag.Operacao = operacao;
+
                     return View("Form", usuario);
                 }
             }
