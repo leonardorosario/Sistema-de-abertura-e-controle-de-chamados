@@ -4,123 +4,150 @@
     ViewBag.Title = isInsert ? "Abertura de Chamado" : "Alterar Chamado";
     string operacao = isInsert ? "I" : "A";
 }
-<h2>@ViewBag.Title</h2>
-@* Utilizando o Helper do MVC para criar o formulário *@
-@using (Html.BeginForm("Salvar", "Chamado", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal col-md-8">
-        <hr />
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    #camposAtendimento {
+        background-color: #f8f9fa;
+        border: 1px dashed #ced4da;
+        padding: 25px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .form-actions {
+        text-align: right;
+        margin-top: 30px;
+    }
+</style>
+
+<div class="form-container">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("Salvar", "Chamado", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <input type="hidden" name="operacao" value="@operacao" />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Id, "ID do Chamado", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Id, "ID", new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-9">
                 @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DataAbertura, "Data de Abertura", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
+        <div class="form-group row">
+            @Html.LabelFor(model => model.DataAbertura, "Data de Abertura", new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-9">
                 @Html.EditorFor(model => model.DataAbertura, new { htmlAttributes = new { @class = "form-control", @type = "date", max = ViewBag.Hoje } })
                 @Html.ValidationMessageFor(model => model.DataAbertura, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DescricaoProblema, "Descrição do Problema", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @Html.TextAreaFor(model => model.DescricaoProblema, new { @class = "form-control", @rows = 4 })
+        <div class="form-group row">
+            @Html.LabelFor(model => model.DescricaoProblema, "Descrição", new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-9">
+                @Html.TextAreaFor(model => model.DescricaoProblema, new { @class = "form-control", @rows = 5, placeholder = "Descreva o problema ou solicitação detalhadamente..." })
                 @Html.ValidationMessageFor(model => model.DescricaoProblema, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Situacao, "Situação", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @* Dropdown para a situação, que é mais intuitivo *@
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Situacao, "Situação", new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-9">
                 @Html.DropDownListFor(model => model.Situacao, new SelectList(
-                new[] {
-                        new { Value = "1", Text = "Pendente" },
-                        new { Value = "2", Text = "Atendido" },
-                        }, "Value", "Text"), "Selecione a Situação",
-                        new { @class = "form-control", id = "situacaoDropdown" }
-                        )
-            @Html.ValidationMessageFor(model => model.Situacao, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    @* Estes campos só aparecerão se a situação for "Atendido" *@
-    <div id="camposAtendimento" style="display: none;">
-        <hr />
-        <h4>Dados do Atendimento</h4>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DataAtendimento, "Data do Atendimento", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
-                @Html.ValidationMessageFor(model => model.DataAtendimento, "", new { @class = "text-danger" })
+                         new[] {
+            new { Value = "1", Text = "Pendente" },
+            new { Value = "2", Text = "Atendido" },
+            }, "Value", "Text"), "Selecione a Situação",
+                         new { @class = "form-control", id = "situacaoDropdown" }
+                         )
+                @Html.ValidationMessageFor(model => model.Situacao, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DescricaoAtendimento, "Descrição do Atendimento", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @Html.TextAreaFor(model => model.DescricaoAtendimento, new { @class = "form-control", @rows = 4 })
-                @Html.ValidationMessageFor(model => model.DescricaoAtendimento, "", new { @class = "text-danger" })
+        <div id="camposAtendimento" style="display: none;">
+            <h4 class="text-center mb-4">Dados do Atendimento</h4>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.DataAtendimento, "Data do Atendimento", new { @class = "col-sm-3 col-form-label" })
+                <div class="col-sm-9">
+                    @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.DataAtendimento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.DescricaoAtendimento, "Solução Aplicada", new { @class = "col-sm-3 col-form-label" })
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.DescricaoAtendimento, new { @class = "form-control", @rows = 5, placeholder = "Descreva a solução aplicada para resolver este chamado..." })
+                    @Html.ValidationMessageFor(model => model.DescricaoAtendimento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.UsuarioId, "Responsável", new { @class = "col-sm-3 col-form-label" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(model => model.UsuarioId, new SelectList(ViewBag.Usuarios, "Id", "Nome"), "Selecione um usuário", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UsuarioId, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UsuarioId, "Usuário Responsável", new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @* Cria um DropDownList usando a lista de usuários que veio do Controller *@
-                @Html.DropDownListFor(
-                                model => model.UsuarioId,
-                                new SelectList(ViewBag.Usuarios, "Id", "Nome"),
-                                "Selecione um usuário",  // Texto inicial da combo
-                                new { @class = "form-control" }
-                                )
-                @Html.ValidationMessageFor(model => model.UsuarioId, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-actions">
+            <a href="/chamado/index" class="btn btn-secondary">Cancelar</a>
+            <input type="submit" value="Salvar" class="btn btn-primary" />
         </div>
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-md-offset-3 col-md-9">
-            <input type="submit" value="Salvar" class="btn btn-success" />
-            <a href="/chamado/index" class="btn btn-default">Cancelar</a>
-        </div>
-    </div>
+    }
 </div>
-}
 
-
-@* Script para mostrar/ocultar os campos de atendimento *@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const situacaoDropdown = document.getElementById('situacaoDropdown');
         const camposAtendimento = document.getElementById('camposAtendimento');
 
         function toggleAtendimentoFields() {
-            // Se o valor for '2' (Atendido), mostra os campos. Senão, oculta.
-            if (situacaoDropdown.value === '2') {
-                camposAtendimento.style.display = 'block';
-            } else {
-                camposAtendimento.style.display = 'none';
-            }
+            camposAtendimento.style.display = (situacaoDropdown.value === '2') ? 'block' : 'none';
         }
 
-        // Executa a função quando a página carrega
-        toggleAtendimentoFields();
-
-        // Executa a função toda vez que o valor do dropdown mudar
+        toggleAtendimentoFields(); 
         situacaoDropdown.addEventListener('change', toggleAtendimentoFields);
     });
 </script>

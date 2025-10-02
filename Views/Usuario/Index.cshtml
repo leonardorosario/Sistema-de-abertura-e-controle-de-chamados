@@ -1,14 +1,78 @@
 ﻿@model List<UsuarioViewModel>
-
 @{
     ViewBag.Title = "Listagem de Usuários";
 }
 
-<h2>@ViewBag.Title</h2>
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
 
-<a href="/usuario/create" class="btn btn-primary">Novo Usuário</a>
-<br />
-<br />
+        .page-header h2 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .usuario-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+        border-left: 5px solid #9b59b6;
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .usuario-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+    .usuario-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex: 1;
+        min-width: 200px;
+    }
+
+        .usuario-info .icon {
+            font-size: 36px;
+            color: #9b59b6;
+        }
+
+        .usuario-info h4 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.25rem;
+        }
+
+        .usuario-info p {
+            margin: 0;
+            color: #7f8c8d;
+        }
+
+    .usuario-actions {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<div class="page-header">
+    <h2>@ViewBag.Title</h2>
+    <a href="/usuario/create" class="btn btn-success btn-lg">👤 Novo Usuário</a>
+</div>
 
 @if (TempData["ErroExcluir"] != null)
 {
@@ -17,25 +81,23 @@
     </div>
 }
 
-
-<table class="table table-striped table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Ações</th>
-    </tr>
-
+<div>
     @foreach (var usuario in Model)
     {
-        <tr>
-            <td>@usuario.Id</td>
-            <td>@usuario.Nome</td>
-            <td>
-                <a href="/usuario/edit/@usuario.Id" class="btn btn-info btn-sm">Editar</a>
-                <a href="/usuario/delete/@usuario.Id" class="btn btn-danger btn-sm" onclick="return confirm('Confirma a exclusão do usuário @usuario.Nome?');">
+        <div class="usuario-card">
+            <div class="usuario-info">
+                <div class="icon">👤</div>
+                <div>
+                    <h4>@usuario.Nome</h4>
+                    <p>ID: @usuario.Id</p>
+                </div>
+            </div>
+            <div class="usuario-actions">
+                <a href="/usuario/edit/@usuario.Id" class="btn btn-info">Editar</a>
+                <a href="/usuario/delete/@usuario.Id" class="btn btn-danger" onclick="return confirm('Confirma a exclusão do usuário @usuario.Nome?');">
                     Excluir
                 </a>
-            </td>
-        </tr>
+            </div>
+        </div>
     }
-</table>
+</div>

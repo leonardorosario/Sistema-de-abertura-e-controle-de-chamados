@@ -1,42 +1,142 @@
 ﻿@model List<ChamadoViewModel>
 @{
+    ViewData["Title"] = "Listagem de Chamados";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var chamadosPendentes = Model.Where(c => c.Situacao == 1).ToList();
+    var chamadosConcluidos = Model.Where(c => c.Situacao == 2).ToList();
 }
-<h2>Listagem de Chamados</h2>
 
-<a href="/chamado/create" class="btn btn-success">Novo Chamado</a>
-<br />
-
-<table class="table table-responsive table-striped table-bordered">
-    <tr>
-        <th>Ações</th>
-        <th>ID</th>
-        <th>Data de Abertura</th>
-        <th>Descrição do Problema</th>
-        <th>Situação</th>
-    </tr>
-    @foreach (var chamado in Model)
-    {
-        <tr>
-            <td>
-                <a href="/chamado/Edit?id=@chamado.Id" class="btn btn-info">Editar</a>
-                <a href="javascript:apagarChamado(@chamado.Id)" class="btn btn-danger">Apagar</a>
-            </td>
-            <td>@chamado.Id</td>
-            <td>@chamado.DataAbertura.ToShortDateString()</td>
-            <td>@chamado.DescricaoProblema</td>
-            <td>
-                @* Converte o número da situação [1] ou [2] para um texto amigável *@
-                @(chamado.Situacao == 1 ? "Pendente" : "Atendido")
-            </td>
-        </tr>
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
     }
-</table>
+
+        .page-header h2 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .chamado-section {
+        margin-bottom: 50px;
+    }
+
+        .chamado-section h3 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+    .chamado-card {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-left: 5px solid #3498db; 
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .chamado-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .chamado-card.concluido {
+            border-left-color: #2ecc71; 
+        }
+
+    .chamado-info {
+        flex: 1;
+        min-width: 250px;
+    }
+
+        .chamado-info p {
+            margin: 0;
+            color: #7f8c8d;
+        }
+
+        .chamado-info strong {
+            color: #2c3e50;
+        }
+
+    .chamado-actions {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<div class="page-header">
+    <h2>Meus Chamados</h2>
+    <a href="/chamado/create" class="btn btn-success btn-lg">➕ Novo Chamado</a>
+</div>
+
+<div class="chamado-section">
+    <h3>Pendentes</h3>
+    @if (chamadosPendentes.Any())
+    {
+        foreach (var chamado in chamadosPendentes)
+        {
+            <div class="chamado-card">
+                <div class="chamado-info">
+                    <p><strong>ID:</strong> @chamado.Id</p>
+                    <p><strong>Aberto em:</strong> @chamado.DataAbertura.ToShortDateString()</p>
+                    <p>@chamado.DescricaoProblema</p>
+                </div>
+                <div class="chamado-actions">
+                    <a href="/chamado/Edit?id=@chamado.Id" class="btn btn-info">Editar</a>
+                    <a href="javascript:apagarChamado(@chamado.Id)" class="btn btn-danger">Apagar</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Nenhum chamado pendente no momento.</p>
+    }
+</div>
+
+<div class="chamado-section">
+    <h3>Concluídos</h3>
+    @if (chamadosConcluidos.Any())
+    {
+        foreach (var chamado in chamadosConcluidos)
+        {
+            <div class="chamado-card concluido">
+                <div class="chamado-info">
+                    <p><strong>ID:</strong> @chamado.Id</p>
+                    <p><strong>Aberto em:</strong> @chamado.DataAbertura.ToShortDateString()</p>
+                    <p>@chamado.DescricaoProblema</p>
+                </div>
+                <div class="chamado-actions">
+                    <a href="/chamado/Edit?id=@chamado.Id" class="btn btn-info">Detalhes</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Nenhum chamado concluído ainda.</p>
+    }
+</div>
+
 
 <script>
     function apagarChamado(id) {
         if (confirm('Confirma a exclusão do chamado?'))
-            location.href = 'chamado/Delete?id=' + id;
+            location.href = '/chamado/Delete?id=' + id;
     }
 </script>
-

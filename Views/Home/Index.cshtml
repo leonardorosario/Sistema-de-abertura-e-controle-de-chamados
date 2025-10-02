@@ -1,8 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Inicial - Sistema de Chamados";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .dashboard-container {
+        padding: 60px 20px;
+        background-color: #f4f7f6;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+
+    .dashboard-header h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 40px;
+    }
+
+   
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px; 
+        flex-wrap: wrap;
+    }
+
+        .action-buttons .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            min-width: 250px; 
+        }
+
+</style>
+
+<div class="dashboard-container text-center">
+    <header class="dashboard-header">
+        <h1>Bem-vindo ao Sistema de Gestão de Chamados</h1>
+    </header>
+
+    <div class="action-buttons">
+        <a asp-controller="Chamado" asp-action="Index" class="btn btn-primary">Ver Chamados</a>
+        <a asp-controller="Usuario" asp-action="Index" class="btn btn-secondary">Gerenciar Usuários</a>
+    </div>
 </div>

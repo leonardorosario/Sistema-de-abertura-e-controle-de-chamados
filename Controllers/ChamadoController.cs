@@ -111,7 +111,14 @@ namespace CadAlunoMVC.Controllers
                 }
                 else
                 {
-                    ViewBag.Operacao = Operacao;   
+                    ViewBag.Operacao = Operacao;
+
+                    UsuarioDAO usuarioDAO = new UsuarioDAO();
+                    ViewBag.Usuarios = usuarioDAO.Listagem();
+
+
+                    ViewBag.Hoje = DateTime.Now.ToString("yyyy-MM-dd");
+
                     return View("Form", chamado);
                 }
             }
