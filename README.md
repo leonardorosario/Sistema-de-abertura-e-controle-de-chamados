@@ -51,5 +51,5 @@ O projeto segue a arquitetura MVC padrão, com a seguinte organização de pasta
 **Leonardo Rosario Teixeira**  
 [GitHub: @leonardorosario](https://github.com/leonardorosario)
 
-**Ryan Corazza Alvarenga** 
+**Ryan Corazza Alvarenga**  
 [GitHub: @aishiteirai](https://github.com/aishiteirai)
